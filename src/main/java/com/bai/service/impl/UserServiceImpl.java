@@ -1,5 +1,6 @@
 package com.bai.service.impl;
 
+import com.bai.constant.CommonConstant;
 import com.bai.domain.entity.User;
 import com.bai.domain.request.AddUserRequest;
 import com.bai.service.IUserService;
@@ -17,7 +18,7 @@ import java.io.IOException;
  */
 @Service
 public class UserServiceImpl implements IUserService {
-    private static final String filepath = "./user_table.txt";
+    private static final String filepath = CommonConstant.DATABASE_FILE_PATH;
 
     @Override
     public void addUser(AddUserRequest addUserRequest) throws IOException {
@@ -27,7 +28,7 @@ public class UserServiceImpl implements IUserService {
         }
         try (FileWriter fileWriter = new FileWriter(filepath, true)) {
             String json = new ObjectMapper().writeValueAsString(addUserRequest);
-            fileWriter.append(json + "\n");
+            fileWriter.append(json).append("\n");
         }
     }
 
@@ -38,15 +39,15 @@ public class UserServiceImpl implements IUserService {
             return null;
         }
 
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        String line = "";
-        ObjectMapper objectMapper = new ObjectMapper();
-        while ((line = bufferedReader.readLine()) != null) {
-            User user = objectMapper.readValue(line, User.class);
-            if (userId == user.getUserId()) {
-                return user;
+        try (FileReader fileReader = new FileReader(file);
+             BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+            String line;
+            ObjectMapper objectMapper = new ObjectMapper();
+            while ((line = bufferedReader.readLine()) != null) {
+                User user = objectMapper.readValue(line, User.class);
+                if (userId == user.getUserId()) {
+                    return user;
+                }
             }
         }
 

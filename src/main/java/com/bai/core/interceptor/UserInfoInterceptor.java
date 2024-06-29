@@ -17,7 +17,7 @@ import java.util.Base64;
 public class UserInfoInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String headerUserInfo = request.getHeader("user-info");
+        String headerUserInfo = request.getHeader(CommonConstant.HEADER_USER_INFO);
 
         try {
             byte[] userInfoBytes = Base64.getDecoder().decode(headerUserInfo);

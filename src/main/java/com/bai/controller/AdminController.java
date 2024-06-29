@@ -27,7 +27,7 @@ public class AdminController {
     @PostMapping("/addUser")
     public Result addUser(@RequestAttribute(CommonConstant.REQUEST_ATTRIBUTE_CURRENT_USER) UserContext currentUser,
                           @RequestBody AddUserRequest addUserRequest) throws IOException {
-        if (!CommonConstant.ADMIN_ROLE_NAME.equals(currentUser.getRole())) {
+        if (!CommonConstant.ROLE_NAME_ADMIN.equals(currentUser.getRole())) {
             return Result.builder().code(403).message("Forbidden").build();
         }
 
